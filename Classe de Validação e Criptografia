@@ -1,0 +1,10 @@
+using System.Text.RegularExpressions;
+
+namespace CadastroUsuario
+{
+    public class Validacoes
+    {
+        public static bool ValidarEmail(string email) =>
+            Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+    }
+}
