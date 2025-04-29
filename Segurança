@@ -1,0 +1,17 @@
+using System.Security.Cryptography;
+using System.Text;
+
+namespace CadastroUsuario
+{
+    public class Seguranca
+    {
+        public static string Criptografar(string senha)
+        {
+            using (SHA256 sha = SHA256.Create())
+            {
+                byte[] bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(senha));
+                return string.Concat(bytes.Select(b => b.ToString("x2")));
+            }
+        }
+    }
+}
