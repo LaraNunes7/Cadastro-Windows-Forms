@@ -1,0 +1,34 @@
+private void btnCadastrar_Click(object sender, EventArgs e)
+{
+    if (string.IsNullOrWhiteSpace(txtNome.Text) ||
+        string.IsNullOrWhiteSpace(txtEmail.Text) ||
+        string.IsNullOrWhiteSpace(txtUsuario.Text) ||
+        string.IsNullOrWhiteSpace(txtSenha.Text))
+    {
+        MessageBox.Show("Preencha todos os campos obrigatórios!");
+        return;
+    }
+
+    if (!Validacoes.ValidarEmail(txtEmail.Text))
+    {
+        MessageBox.Show("E-mail inválido!");
+        return;
+    }
+
+    Usuario user = new Usuario
+    {
+        Nome = txtNome.Text,
+        Email = txtEmail.Text,
+        UsuarioLogin = txtUsuario.Text,
+        Senha = txtSenha.Text
+    };
+
+    if (user.Cadastrar())
+    {
+        MessageBox.Show("Usuário cadastrado com sucesso!");
+    }
+    else
+    {
+        MessageBox.Show("E-mail ou usuário já cadastrado.");
+    }
+}
