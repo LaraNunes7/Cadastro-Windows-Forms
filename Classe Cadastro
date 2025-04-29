@@ -1,0 +1,36 @@
+using MySql.Data.MySqlClient;
+
+namespace CadastroUsuario
+{
+    public class Usuario
+    {
+        public string Nome { get; set; }
+        public string Email { get; set; }
+        public string UsuarioLogin { get; set; }
+        public string Senha { get; set; }
+
+        public bool Cadastrar()
+        {
+            using (var conn = Conexao.ObterConexao())
+            {
+                conn.Open();
+
+                var cmdCheck = new MySqlCommand("SELECT id FROM usuarios WHERE email = @e OR usuario = @u", conn);
+                cmdCheck.Parameters.AddWithValue("@e", Email);
+                cmdCheck.Parameters.AddWithValue("@u", UsuarioLogin);
+                var reader = cmdCheck.ExecuteReader();
+                if (reader.HasRows) return false;
+                reader.Close();
+
+                var senhaCriptografada = Seguranca.Criptografar(Senha);
+                var cmd = new MySqlCommand("INSERT INTO usuarios (nome, email, usuario, senha) VALUES (@n, @e, @u, @s)", conn);
+                cmd.Parameters.AddWithValue("@n", Nome);
+                cmd.Parameters.AddWithValue("@e", Email);
+                cmd.Parameters.AddWithValue("@u", UsuarioLogin);
+                cmd.Parameters.AddWithValue("@s", senhaCriptografada);
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+        }
+    }
+}
